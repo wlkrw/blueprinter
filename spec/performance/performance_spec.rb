@@ -71,7 +71,7 @@ RSpec.shared_context 'movie class' do
   end
 end
 
-describe 'FastJsonapi::ObjectSerializer' do
+describe 'Blueprinter' do
   include_context 'movie class'
 
   def print_stats(count, our_time)
