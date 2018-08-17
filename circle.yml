@@ -10,3 +10,7 @@ test:
   post:
     - bundle exec rake
     - bundle exec rake benchmarks
+    - echo "deb http://http.debian.net/debian jessie-backports main" | tee --append /etc/apt/sources.list.d/jessie-backports.list > /dev/null
+    - apt update -qq
+    - apt install -y --no-install-recommends -t jessie-backports openjdk-8-jdk
+    - bash <(curl -s https://blackducksoftware.github.io/hub-detect/hub-detect.sh) --blackduck.hub.url="https://procore.blackducksoftware.com" --blackduck.hub.api.token=$BLACKDUCK_API_TOKEN || exit 0
