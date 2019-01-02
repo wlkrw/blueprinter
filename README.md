@@ -469,7 +469,8 @@ documentation rules:
 - Methods that are not set to private due to ruby visibility rule limitations should be marked with `@api private`.
 
 ## Contributing
-Feel free to browse the issues, converse, and make pull requests. If you need help, first please see if there is already an issue for your problem. Otherwise, go ahead and make a new issue.
+When contributing, please first check to see if there is already an existing [issue](https://github.com/procore/blueprinter/issues) for your problem or enhancement. If an issue does not yet exist for your concern, please create one. A member of the core team will help fix/support/resolve your issue or can help guide you in creating a pull request if you wish to contribute directly.
+Feel free to browse the issues, converse, and make pull requests. Happy contributing! 🎉
 
 ### Tests
 You can run tests with `bundle exec rake`.
