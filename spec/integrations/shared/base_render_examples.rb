@@ -71,7 +71,7 @@ shared_examples 'Base::render' do
     let(:blueprint) do
       Class.new(Blueprinter::Base) do
         identifier :id
-        field :birthday,   datetime_format: "%m/%d/%Y"
+        field :birthday
         field :deleted_at, datetime_format: '%FT%T%:z'
       end
     end
@@ -253,30 +253,31 @@ shared_examples 'Base::render' do
   context 'Given blueprint has ::view' do
     let(:normal) do
       ['{"id":' + obj_id + '', '"employer":"Procore"', '"first_name":"Meg"',
-      '"position":"Manager"}'].join(',')
+      '"last_name":"' + obj[:last_name] + '"', '"position":"Manager"}'].join(',')
     end
     let(:ext) do
       ['{"id":' + obj_id + '', '"description":"A person"', '"employer":"Procore"',
       '"first_name":"Meg"', '"position":"Manager"}'].join(',')
     end
     let(:special) do
-      ['{"id":' + obj_id + '', '"description":"A person"', '"employer":"Procore"',
+      ['{"id":' + obj_id + '', '"description":"A person"',
       '"first_name":"Meg"}'].join(',')
     end
     let(:blueprint) do
       Class.new(Blueprinter::Base) do
         identifier :id
         view :normal do
-          fields :first_name, :position
+          fields :first_name, :last_name, :position
           field :company, name: :employer
         end
         view :extended do
           include_view :normal
           field :description
+          exclude :last_name
         end
         view :special do
           include_view :extended
-          exclude :position
+          excludes :employer, :position
         end
       end
     end
@@ -305,14 +306,14 @@ shared_examples 'Base::render' do
 
   context 'Given blueprint has :meta without :root' do
     let(:blueprint) { blueprint_with_block }
-    it('raises a BlueprinterError') { 
+    it('raises a BlueprinterError') {
       expect{blueprint.render(obj, meta: 'meta_value')}.to raise_error(Blueprinter::BlueprinterError)
     }
   end
 
   context 'Given blueprint has root as a non-supported object' do
     let(:blueprint) { blueprint_with_block }
-    it('raises a BlueprinterError') { 
+    it('raises a BlueprinterError') {
       expect{blueprint.render(obj, root: {some_key: "invalid root"})}.to raise_error(Blueprinter::BlueprinterError)
     }
   end
