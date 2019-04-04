@@ -6,6 +6,7 @@ require_relative 'extractors/auto_extractor'
 require_relative 'extractors/block_extractor'
 require_relative 'extractors/hash_extractor'
 require_relative 'extractors/public_send_extractor'
+require_relative 'formatters/date_time_formatter'
 require_relative 'field'
 require_relative 'helpers/base_helpers'
 require_relative 'view'
@@ -18,7 +19,7 @@ module Blueprinter
     # Specify a field or method name used as an identifier. Usually, this is
     # something like :id
     #
-    # Note: identifiers are always rendered and considerered their own view,
+    # Note: identifiers are always rendered and considered their own view,
     # similar to the :default view.
     #
     # @param method [Symbol] the method or field used as an identifier that you
@@ -70,8 +71,11 @@ module Blueprinter
     # @option options [Symbol] :name Use this to rename the method. Useful if
     #   if you want your JSON key named differently in the output than your
     #   object's field or method name.
-    # @option options [String] :datetime_format Format Date or DateTime object
-    #   with given strftime formatting
+    # @option options [String,Proc] :datetime_format Format Date or DateTime object
+    #   If the option provided is a String, the object will be formatted with given strftime
+    #   formatting.
+    #   If this option is a Proc, the object will be formatted by calling the provided Proc
+    #   on the Date/DateTime object.
     # @option options [Symbol,Proc] :if Specifies a method, proc or string to
     #   call to determine if the field should be included (e.g.
     #   `if: :include_first_name?, or if: Proc.new { |user, options| options[:current_user] == user }).
@@ -170,7 +174,7 @@ module Blueprinter
     # @option options [Symbol|String] :root Defaults to nil.
     #   Render the json/hash with a root key if provided.
     # @option options [Any] :meta Defaults to nil.
-    #   Render the json/hash with a meta attribute with provided value 
+    #   Render the json/hash with a meta attribute with provided value
     #   if both root and meta keys are provided in the options hash.
     #
     # @example Generating JSON with an extended view
@@ -195,7 +199,7 @@ module Blueprinter
     # @option options [Symbol|String] :root Defaults to nil.
     #   Render the json/hash with a root key if provided.
     # @option options [Any] :meta Defaults to nil.
-    #   Render the json/hash with a meta attribute with provided value 
+    #   Render the json/hash with a meta attribute with provided value
     #   if both root and meta keys are provided in the options hash.
     #
     # @example Generating a hash with an extended view
@@ -220,7 +224,7 @@ module Blueprinter
     # @option options [Symbol|String] :root Defaults to nil.
     #   Render the json/hash with a root key if provided.
     # @option options [Any] :meta Defaults to nil.
-    #   Render the json/hash with a meta attribute with provided value 
+    #   Render the json/hash with a meta attribute with provided value
     #   if both root and meta keys are provided in the options hash.
     #
     # @example Generating a hash with an extended view
@@ -308,6 +312,29 @@ module Blueprinter
     # @return [Array<Symbol>] an array of field names
     def self.exclude(field_name)
       current_view.exclude_field(field_name)
+    end
+    
+    # When mixing multiple views under a single view, some fields may required to be excluded from
+    # current view
+    # 
+    # @param [Array<Symbol>] the fields to exclude from the current view.
+    #
+    # @example Excluding mutiple fields from being included into the current view.
+    #   view :normal do
+    #     fields :name,:address,:position, 
+    #           :company, :contact
+    #   end
+    #   view :special do
+    #     include_view :normal
+    #     fields :birthday,:joining_anniversary
+    #     excludes :position,:address
+    #   end
+    #   => [:name, :company, :contact, :birthday, :joining_anniversary]
+    #
+    # @return [Array<Symbol>] an array of field names
+    
+    def self.excludes(*field_names)
+      current_view.exclude_fields(field_names)
     end
 
     # Specify a view and the fields it should have.
