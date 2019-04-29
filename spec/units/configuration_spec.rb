@@ -20,6 +20,14 @@ describe 'Blueprinter' do
       expect(Blueprinter.configuration.method).to be(:encode)
     end
 
+    it 'should set the `middlewares`' do
+      TestMiddleware = Class.new
+      Blueprinter.configure { |config|
+        config.middlewares = [TestMiddleware]
+      }
+      expect(Blueprinter.configuration.middlewares).to match_array([TestMiddleware])
+    end
+
     it 'should set the `sort_fields_by`' do
       Blueprinter.configure { |config|
         config.sort_fields_by = :definition

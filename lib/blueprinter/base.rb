@@ -313,15 +313,15 @@ module Blueprinter
     def self.exclude(field_name)
       current_view.exclude_field(field_name)
     end
-    
+
     # When mixing multiple views under a single view, some fields may required to be excluded from
     # current view
-    # 
+    #
     # @param [Array<Symbol>] the fields to exclude from the current view.
     #
     # @example Excluding mutiple fields from being included into the current view.
     #   view :normal do
-    #     fields :name,:address,:position, 
+    #     fields :name,:address,:position,
     #           :company, :contact
     #   end
     #   view :special do
@@ -332,7 +332,7 @@ module Blueprinter
     #   => [:name, :company, :contact, :birthday, :joining_anniversary]
     #
     # @return [Array<Symbol>] an array of field names
-    
+
     def self.excludes(*field_names)
       current_view.exclude_fields(field_names)
     end
@@ -356,6 +356,30 @@ module Blueprinter
       @current_view = view_collection[view_name]
       yield
       @current_view = view_collection[:default]
+    end
+
+    def self.as_hash
+      view_names = view_collection.views.keys
+      view_names.each_with_object({}) do |view_name, result|
+        #result[view_name] = view_collection.fields_for(view_name)
+        fields_for_view = view_collection.fields_for(view_name)
+        properties = fields_for_view.each_with_object({}) do |field, properties|
+          swagger_opts = field.options[:swagger] || {}
+          properties[field.name] = {
+            example: swagger_opts[:example],
+            description: swagger_opts[:description],
+            type: swagger_opts[:type],
+          }
+        end
+
+        blueprint_name = self.to_s.sub('Blueprint','')
+        camelized_view_name = view_name.to_s.split('_').collect(&:capitalize).join
+        result["#{blueprint_name}#{camelized_view_name}"] = {
+          type: 'object',
+          properties: properties
+        }
+        result
+      end
     end
   end
 end

@@ -298,6 +298,9 @@ shared_examples 'Base::render' do
   end
 
   context 'Given blueprint has ::view' do
+    let(:identifier) do
+      ['{"id":' + obj_id + '}']
+    end
     let(:normal) do
       ['{"id":' + obj_id + '', '"employer":"Procore"', '"first_name":"Meg"',
       '"last_name":"' + obj[:last_name] + '"', '"position":"Manager"}'].join(',')
@@ -329,6 +332,7 @@ shared_examples 'Base::render' do
       end
     end
     it('returns json derived from a view') do
+      expect(blueprint.render(obj, view: :identifier)).to eq(identifier)
       expect(blueprint.render(obj, view: :normal)).to eq(normal)
       expect(blueprint.render(obj, view: :extended)).to eq(ext)
       expect(blueprint.render(obj, view: :special)).to eq(special)

@@ -38,7 +38,7 @@ module Blueprinter
         ret = { root => data }
         meta ? ret.merge!(meta: meta) : ret
       end
-      
+
       def inherited(subclass)
         subclass.send(:view_collection).inherit(view_collection)
       end
