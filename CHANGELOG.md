@@ -1,3 +1,18 @@
+## 0.22.0  - 2019/12/26
+* 🚀 [FEATURE] Add rails generators. See `rails g blueprinter:blueprint --help` for usage. Introduced in [#176](https://github.com/procore/blueprinter/pull/176) by [@wlkrw](https://github.com/wlkrw).
+
+## 0.21.0  - 2019/12/19
+* 🚀 [FEATURE] Ability to specify `default_if` field/association option for more control on when the default value is applied. [191](https://github.com/procore/blueprinter/pull/191). Thanks to [@mcclayton](https://github.com/mcclayton).
+
+## 0.20.0  - 2019/10/15
+* 🚀 [FEATURE] Ability to include multiple views in a single method call with `include_views`. [184](https://github.com/procore/blueprinter/pull/184). Thanks to [@narendranvelmurugan](https://github.com/narendranvelmurugan).
+
+* 💅 [ENHANCEMENT] Update field-level conditional settings to reflect new three-argument syntax. [183](https://github.com/procore/blueprinter/pull/183). Thanks to [@danirod](https://github.com/danirod).
+
+* 💅 [ENHANCEMENT] Modify Extractor access control in documentation. [182](https://github.com/procore/blueprinter/pull/182). Thanks to [@cagmz](https://github.com/cagmz).
+
+* 💅 [ENHANCEMENT] Fix the Transformer example documentation. [174](https://github.com/procore/blueprinter/pull/174). Thanks to [@tjwallace](https://github.com/tjwallace).
+
 ## 0.19.0  - 2019/07/24
 * 🚀 [FEATURE] Added ability to specify transformers for Blueprinter views to further process the resulting hash before serialization. [#164](https://github.com/procore/blueprinter/pull/164). Thanks to [@amalarayfreshworks](https://github.com/amalarayfreshworks).
 
@@ -33,7 +48,7 @@
 
 ## 0.12.1  - 2019/1/24
 
-* 🐛 [BUGFIX] Fix boolean `false` values getting serialized as `null`. Please see PR [#132](https://github.com/procore/blueprinter/pull/132).
+* 🐛 [BUGFIX] Fix boolean `false` values getting serialized as `null`. Please see PR [#132](https://github.com/procore/blueprinter/pull/132). Thanks to [@samsongz](https://github.com/samsongz).
 
 ## 0.12.0  - 2019/1/16
 

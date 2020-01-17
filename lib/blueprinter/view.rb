@@ -23,7 +23,7 @@ module Blueprinter
       view.excluded_field_names.each do |field_name|
         exclude_field(field_name)
       end
-      
+
       view.transformers.each do |transformer|
         self.add_transformer(transformer)
       end
@@ -33,10 +33,16 @@ module Blueprinter
       included_view_names << view_name
     end
 
+    def include_views(view_names)
+      view_names.each do |view_name|
+        included_view_names << view_name
+      end
+    end
+
     def exclude_field(field_name)
       excluded_field_names << field_name
     end
-    
+
     def exclude_fields(field_names)
       field_names.each do |field_name|
         excluded_field_names << field_name
